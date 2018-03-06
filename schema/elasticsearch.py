@@ -68,6 +68,9 @@ class ESSchema(SchemaBase):
     def get_indices(self, names):
         return self.es.indices(names)
 
+    def get_schema_names(self):
+    	pass
+
     def get_schema_info(self):
         schema = {}
         schema['table'] = self.get_table_info()

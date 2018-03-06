@@ -19,7 +19,7 @@ class SqlTable(TableBase):
     def get_columns(self, table):
         return self.inspector.get_columns(table)
         
-    def get_row_count(self):
+    def get_row_count(self, table):
         pass
 
     """ Return information about primary key constraint on table_name.
@@ -45,13 +45,17 @@ class SqlTable(TableBase):
         return self.inspector.get_unique_constraints()
 
     def get_statistic(self):
-        pass
+        statistic = {}
+        statistic['row_count'] = self.get_row_count()
+        statistic['state'] = None
+        return statistic
 
     def get_entry_type(self):
-        pass
+        entry_type = {}
+        entry_type['colume'] = self.get_columns()
 
     def get_table_info(self):
-    	table = {}
+        table = {}
         table['statistic'] = self.get_statistic()
         table['entry_type'] = self.get_entry_type()
 
@@ -75,7 +79,23 @@ class SqlSchema(SchemaBase):
     def get_schema_names(self):
         return self.inspector.get_schema_names()
 
+    def get_statistic(self, table):
+        statistic = {}
+        statistic['row_count'] = None
+        statistic['state'] = None
+
+    def get_entry_type(self, table):
+        self.inspector.get_columns(table)
+
+    def get_table_info(self, table_name):
+        table = {}
+        table['entry_type'] = self.get_entry_type(table_name)
+        table['statistic']  = self.get_statistic()
+        return table
+
     def get_schema_info(self):
         schema = {}
-        schema['table'] = self.get_table_info()
+        table_list = self.get_tables()
+        for item in table_list:
+            schema[item] = self.get_table_info(item)
         return schema

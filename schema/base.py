@@ -95,10 +95,7 @@ class TableBase(object):
         pass
 
     def get_table_info(self):
-        table = {}
-        table['entry_type'] = self.get_entry_type()
-        table['statistic']  = self.get_statistic()
-        return table
+        pass
 
 
 class SchemaBase(object):
